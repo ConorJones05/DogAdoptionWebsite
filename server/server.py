@@ -18,11 +18,9 @@ CORS(app, supports_credentials=True)
 def dashboard():
     """Retrieve all dogs and calculate statistics for the admin dashboard."""
     try:
-        # Get all dogs from the database
         response = supabase.table("dogs").select("*").execute()
         dogs = response.data
         
-        # Calculate statistics
         if not dogs:
             stats = {
                 "total_dogs": 0,
@@ -32,22 +30,18 @@ def dashboard():
                 "average_price": 0
             }
         else:
-            # Get unique breeds and count them
             breeds = {}
             total_value = 0
             
             for dog in dogs:
-                # Count breed occurrences
                 breed = dog.get('breed')
                 if breed in breeds:
                     breeds[breed] += 1
                 else:
                     breeds[breed] = 1
                 
-                # Sum up total inventory value
                 total_value += dog.get('price', 0)
             
-            # Calculate statistics
             stats = {
                 "total_dogs": len(dogs),
                 "unique_breeds": len(breeds),
