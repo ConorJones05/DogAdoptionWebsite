@@ -32,9 +32,20 @@ def fetch_random_name():
     return "Unknown"
 
 def insert_dog_data():
-    for _ in range(190):
+    # Set to keep track of already used dog image URLs
+    used_image_urls = set()
+    
+    for _ in range(500):
         dog_name = fetch_random_name()
-        dog_image, dog_breed = fetch_dog_image()
+        dog_image, dog_breed = None, None
+        
+        # Keep trying until we get a unique dog image
+        while True:
+            dog_image, dog_breed = fetch_dog_image()
+            if dog_image and dog_image not in used_image_urls:
+                used_image_urls.add(dog_image)
+                break
+        
         dog_price = int(random.uniform(50, 200))
 
         if dog_image:
